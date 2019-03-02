@@ -347,6 +347,15 @@ double doIris(string base, std::vector<std::string> data) {
 
 
     Mat original = imread(file, IMREAD_GRAYSCALE);
+
+
+    Mat resized(original.rows + 200, original.cols, CV_8UC1);
+
+    original.copyTo( resized( Rect(0, 100, original.cols, original.rows) ) );
+    //imshow("res", resized);
+
+    original = resized;
+
     Mat draw = original.clone();
     imshow("Original", original);
 
@@ -388,7 +397,6 @@ double doIris(string base, std::vector<std::string> data) {
     }
     /// Apply Histogram Equalization
     equalizeHist( lid_preprocc, lid_preprocc );
-    equalizeHist( lid_preprocc, lid_preprocc );
 
     imshow("hist", lid_preprocc);
 
@@ -415,8 +423,103 @@ double doIris(string base, std::vector<std::string> data) {
             min_pos = i;
         }
     }
+    Vec3i zrenicka_c;
+    double outer_radius = 0;
     if(circ_out.size()){
         Vec3i c = circ_out[min_pos];
+        zrenicka_c = c;
+        Point center = Point(c[0], c[1]);
+        outer_radius = c[2];
+
+        Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
+        Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
+        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+
+        circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+        // circle outline
+        int radius = c[2];
+        circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
+    }
+
+    // viecka
+    GaussianBlur(original, lid_preprocc, Size(5,5), 1.7, 0);
+
+    low = 140, high = 5;
+    Canny(lid_preprocc, iris_canny, low, high , 3);
+    imshow("Cannied outer", iris_canny);
+    int rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
+    vector<Vec3f> circ_vie;
+    HoughCircles(lid_preprocc, circ_vie, HOUGH_GRADIENT, 1,
+                 25,  // change this value to detect circles with different distances to each other
+                 low, high, rad_min, rad_max// change the last two parameters
+            // (min_radius & max_radius) to detect larger circles
+    );
+    cout << "viecka:" << circ_vie.size();
+    Vec3f horne_v_mean, dolne_v_mean;
+    int horne_v_mean_c = 0, dolne_v_mean_c = 0;
+
+    for( size_t i = 0; i < circ_vie.size(); i++ )
+    {
+        Vec3i c = circ_vie[i];
+        Point center = Point(c[0], c[1]);
+
+        // horna
+        if(c[1] > zrenicka_c[1]) {
+
+            double dist = abs(zrenicka_c[0] - c[0]);
+            if(dist < 20) {
+                horne_v_mean[0] += c[0];
+                horne_v_mean[1] += c[1];
+                horne_v_mean[2] += c[2];
+                horne_v_mean_c++;
+               /* cout << "rozdil " << dist << "\n";
+                circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+                // circle outline
+                int radius = c[2];
+                circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);*/
+            }
+        }
+
+        //dolna
+/*
+        if(c[1] < zrenicka_c[1]) {
+
+            double dist = abs(zrenicka_c[0] - c[0]);
+            if(dist < 20) {
+                horne_v_mean[0] += c[0];
+                horne_v_mean[1] += c[1];
+                horne_v_mean[2] += c[2];
+                horne_v_mean_c++;
+                cout << "rozdil " << dist << "\n";
+                 circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+                 // circle outline
+                 int radius = c[2];
+                 circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
+            }
+        }*/
+    }
+
+    if(horne_v_mean_c) {
+        Vec3i c;
+        c[0] += horne_v_mean[0] / horne_v_mean_c;
+        c[1] += horne_v_mean[1] / horne_v_mean_c;
+        c[2] += horne_v_mean[2] / horne_v_mean_c;
+        Point center = Point(c[0], c[1]);
+
+        Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
+        Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
+        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+
+        circle(draw, center, 1, Scalar(0, 100, 100), 3, LINE_AA);
+        // circle outline
+        int radius = c[2];
+        circle(draw, center, radius, Scalar(255, 0, 255), 3, LINE_AA);
+    }
+    if(dolne_v_mean_c){
+        Vec3i c;
+        c[0] += dolne_v_mean[0] / dolne_v_mean_c;
+        c[1] += dolne_v_mean[1] / dolne_v_mean_c;
+        c[2] += dolne_v_mean[2] / dolne_v_mean_c;
         Point center = Point(c[0], c[1]);
 
         Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
@@ -428,6 +531,7 @@ double doIris(string base, std::vector<std::string> data) {
         int radius = c[2];
         circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
     }
+
     imshow("detected circless", draw);
 
     waitKey(0);
