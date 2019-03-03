@@ -498,14 +498,16 @@ double doIris(string base, std::vector<std::string> data) {
             }
         }*/
     }
-
+    Point horne_viecko_center;
+    Vec3i horne_viecko_vec;
     if(horne_v_mean_c) {
         Vec3i c;
         c[0] += horne_v_mean[0] / horne_v_mean_c;
         c[1] += horne_v_mean[1] / horne_v_mean_c;
         c[2] += horne_v_mean[2] / horne_v_mean_c;
+        horne_viecko_vec = c;
         Point center = Point(c[0], c[1]);
-
+        horne_viecko_center = center;
         Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
         Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
         cout << "\n" << uspesnost(fcirc, rajt) << "\n";
@@ -515,6 +517,47 @@ double doIris(string base, std::vector<std::string> data) {
         int radius = c[2];
         circle(draw, center, radius, Scalar(255, 0, 255), 3, LINE_AA);
     }
+    horne_viecko_center.y += 50;
+    Mat mask = Mat::zeros(lid_preprocc.rows, lid_preprocc.cols, CV_8UC1);
+    circle(mask, horne_viecko_center, horne_viecko_vec[2], Scalar(255,255,255), -1, 8, 0 );
+    Mat final_result = Mat::zeros(lid_preprocc.rows, lid_preprocc.cols, CV_8UC1);
+    lid_preprocc.copyTo(final_result, mask);
+
+
+    low = 140, high = 5;
+    Canny(final_result, iris_canny, low, high , 3);
+    imshow("Cannied outer", iris_canny);
+    rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
+    vector<Vec3f> circ_vie_d;
+    HoughCircles(final_result, circ_vie_d, HOUGH_GRADIENT, 1,
+                 15,  // change this value to detect circles with different distances to each other
+                 low, high, rad_min, rad_max// change the last two parameters
+            // (min_radius & max_radius) to detect larger circles
+    );
+    cout << "viecka:" << circ_vie_d.size();
+
+    for( size_t i = 0; i < circ_vie_d.size(); i++ )
+    {
+        Vec3i c = circ_vie_d[i];
+        Point center = Point(c[0], c[1]);
+
+        if(c[1] < zrenicka_c[1]) {
+
+            double dist = abs(zrenicka_c[0] - c[0]);
+            if(dist < 100) {
+                dolne_v_mean[0] += c[0];
+                dolne_v_mean[1] += c[1];
+                dolne_v_mean[2] += c[2];
+                dolne_v_mean_c++;
+                cout << "rozdil " << dist << "\n";
+                /* circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+                 // circle outline
+                 int radius = c[2];
+                 circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);*/
+            }
+        }
+    }
+
     if(dolne_v_mean_c){
         Vec3i c;
         c[0] += dolne_v_mean[0] / dolne_v_mean_c;
