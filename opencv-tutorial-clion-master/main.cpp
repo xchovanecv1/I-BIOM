@@ -49,7 +49,7 @@ double unionArea(Circle A, Circle B) {
 }
 
 double uspesnost (Circle A, Circle B) {
-    return 1 - (intersectionArea(A, B) / unionArea(A, B));
+    return (intersectionArea(A, B) / unionArea(A, B));
 }
 
 int findFile(string name) {
@@ -345,13 +345,14 @@ double doIris(string base, std::vector<std::string> data) {
 
     cout << data.at(0) << "test";
 
+    int x_offset = 100, y_offset = 200;
 
     Mat original = imread(file, IMREAD_GRAYSCALE);
 
 
-    Mat resized(original.rows + 200, original.cols, CV_8UC1);
+    Mat resized(original.rows + (y_offset * 2), original.cols + (x_offset * 2), CV_8UC1);
 
-    original.copyTo( resized( Rect(0, 100, original.cols, original.rows) ) );
+    original.copyTo( resized( Rect((x_offset), (y_offset), original.cols, original.rows) ) );
     //imshow("res", resized);
 
     original = resized;
@@ -388,9 +389,19 @@ double doIris(string base, std::vector<std::string> data) {
             circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
     }
     if(circless.size()){
-        Circle rajt = createCircle(stoi(data.at(4)), stoi(data.at(5)), stoi(data.at(6)));
-        Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
-        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+
+        int r_x = stoi(data.at(1)), r_y = stoi(data.at(2)), r_r = stoi(data.at(3));
+        int g_x = circless[0][0], g_y = circless[0][1], g_r = circless[0][2];
+        r_x += x_offset; r_y += y_offset;
+
+        Circle rajt = createCircle(r_x, r_y, r_r);
+        Circle fcirc = createCircle(g_x, g_y, g_r);
+        cout << "\nUspesnost zrenicky: " << uspesnost(fcirc, rajt) << "\n";
+/*
+        Rect2d r1(x1, y1, width1, height1);
+        Rect2d r2(x2, y2, width2, height2);
+        Rect2d r3 = r1 & r2;
+*/
         //return uspesnost(fcirc, rajt);
     } else {
         //return 0;
@@ -508,7 +519,7 @@ double doIris(string base, std::vector<std::string> data) {
         horne_viecko_vec = c;
         Point center = Point(c[0], c[1]);
         horne_viecko_center = center;
-        Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
+        Circle rajt = createCircle(stoi(data.at(7)), stoi(data.at(8)), stoi(data.at(9)));
         Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
         cout << "\n" << uspesnost(fcirc, rajt) << "\n";
 
@@ -523,7 +534,7 @@ double doIris(string base, std::vector<std::string> data) {
     Mat final_result = Mat::zeros(lid_preprocc.rows, lid_preprocc.cols, CV_8UC1);
     lid_preprocc.copyTo(final_result, mask);
 
-
+    imshow("final orez", final_result);
     low = 140, high = 5;
     Canny(final_result, iris_canny, low, high , 3);
     imshow("Cannied outer", iris_canny);
@@ -544,13 +555,13 @@ double doIris(string base, std::vector<std::string> data) {
         if(c[1] < zrenicka_c[1]) {
 
             double dist = abs(zrenicka_c[0] - c[0]);
-            if(dist < 100) {
+            if(dist < 80 && c[1] + c[2] > zrenicka_c[1]){
                 dolne_v_mean[0] += c[0];
                 dolne_v_mean[1] += c[1];
                 dolne_v_mean[2] += c[2];
                 dolne_v_mean_c++;
                 cout << "rozdil " << dist << "\n";
-                /* circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+                /*circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
                  // circle outline
                  int radius = c[2];
                  circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);*/
