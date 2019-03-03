@@ -397,11 +397,14 @@ double doIris(string base, std::vector<std::string> data) {
         Circle rajt = createCircle(r_x, r_y, r_r);
         Circle fcirc = createCircle(g_x, g_y, g_r);
         cout << "\nUspesnost zrenicky: " << uspesnost(fcirc, rajt) << "\n";
-/*
-        Rect2d r1(x1, y1, width1, height1);
-        Rect2d r2(x2, y2, width2, height2);
+
+        Rect2d r1(r_x - r_r, r_y - r_r, r_r * 2, r_r * 2);
+        Rect2d r2(g_x - g_r, g_y - g_r, g_r * 2, g_r * 2);
         Rect2d r3 = r1 & r2;
-*/
+        Rect2d r4 = r1 | r2;
+
+        cout << "\nUspesnost zrenicky: " << r3.area() / r4.area() << "\n";
+
         //return uspesnost(fcirc, rajt);
     } else {
         //return 0;
@@ -421,12 +424,13 @@ double doIris(string base, std::vector<std::string> data) {
                  low, high, 80, 120// change the last two parameters
             // (min_radius & max_radius) to detect larger circles
     );
-    cout << "Outer:" << circ_out.size();
+    //cout << "Outer:" << circ_out.size();
     double min = std::numeric_limits<double>::max();
     int min_pos = 0;
     for( size_t i = 0; i < circ_out.size(); i++ )
     {
         Vec3i c = circ_out[i];
+        if(c[0] > original.cols || c[1] > original.rows) continue;
         Point center = Point(c[0], c[1]);
         double dist = norm(zrenicka_cent - center);
         if(dist <= min) {
@@ -442,11 +446,26 @@ double doIris(string base, std::vector<std::string> data) {
         Point center = Point(c[0], c[1]);
         outer_radius = c[2];
 
-        Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
-        Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
-        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+        int r_x = stoi(data.at(4)), r_y = stoi(data.at(5)), r_r = stoi(data.at(6));
+        int g_x = c[0], g_y = c[1], g_r = c[2];
+        r_x += x_offset; r_y += y_offset;
 
-        circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
+        Circle rajt = createCircle(r_x, r_y, r_r);
+        Circle fcirc = createCircle(g_x, g_y, g_r);
+        cout << g_x << " " << g_y << " " << g_r << " \n";
+        cout << r_x << " " << r_y << " " << r_r << " \n";
+        cout << "\nUspesnost duhovky: " << uspesnost(fcirc, rajt) << "\n";
+
+
+        Rect2d r1(r_x - r_r, r_y - r_r, r_r * 2, r_r * 2);
+        Rect2d r2(g_x - g_r, g_y - g_r, g_r * 2, g_r * 2);
+        Rect2d r3 = r1 & r2;
+        Rect2d r4 = r1 | r2;
+
+        cout << "\nUspesnost duhovky: " << r3.area() / r4.area() << "\n";
+
+
+       // circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
         // circle outline
         int radius = c[2];
         circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
@@ -521,7 +540,19 @@ double doIris(string base, std::vector<std::string> data) {
         horne_viecko_center = center;
         Circle rajt = createCircle(stoi(data.at(7)), stoi(data.at(8)), stoi(data.at(9)));
         Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
-        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+        //cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+
+        int r_x = stoi(data.at(10)), r_y = stoi(data.at(11)), r_r = stoi(data.at(12));
+        int g_x = c[0], g_y = c[1], g_r = c[2];
+        r_x += x_offset; r_y += y_offset;
+
+        Rect2d r1(r_x - r_r, r_y - r_r, r_r * 2, r_r * 2);
+        Rect2d r2(g_x - g_r, g_y - g_r, g_r * 2, g_r * 2);
+        Rect2d r3 = r1 & r2;
+        Rect2d r4 = r1 | r2;
+
+        cout << "\nUspesnost horneho viecka: " << r3.area() / r4.area() << "\n";
+
 
         circle(draw, center, 1, Scalar(0, 100, 100), 3, LINE_AA);
         // circle outline
@@ -560,7 +591,7 @@ double doIris(string base, std::vector<std::string> data) {
                 dolne_v_mean[1] += c[1];
                 dolne_v_mean[2] += c[2];
                 dolne_v_mean_c++;
-                cout << "rozdil " << dist << "\n";
+                //cout << "rozdil " << dist << "\n";
                 /*circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
                  // circle outline
                  int radius = c[2];
@@ -576,9 +607,16 @@ double doIris(string base, std::vector<std::string> data) {
         c[2] += dolne_v_mean[2] / dolne_v_mean_c;
         Point center = Point(c[0], c[1]);
 
-        Circle rajt = createCircle(stoi(data.at(5)), stoi(data.at(4)), stoi(data.at(6)));
-        Circle fcirc = createCircle(circless[0][0], circless[0][1], circless[0][2]);
-        cout << "\n" << uspesnost(fcirc, rajt) << "\n";
+        int r_x = stoi(data.at(7)), r_y = stoi(data.at(8)), r_r = stoi(data.at(9));
+        int g_x = c[0], g_y = c[1], g_r = c[2];
+        r_x += x_offset; r_y += y_offset;
+
+        Rect2d r1(r_x - r_r, r_y - r_r, r_r * 2, r_r * 2);
+        Rect2d r2(g_x - g_r, g_y - g_r, g_r * 2, g_r * 2);
+        Rect2d r3 = r1 & r2;
+        Rect2d r4 = r1 | r2;
+
+        cout << "\nUspesnost dolneho  viecka: " << r3.area() / r4.area() << "\n";
 
         circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
         // circle outline
