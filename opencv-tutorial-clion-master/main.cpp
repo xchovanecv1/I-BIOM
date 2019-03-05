@@ -338,7 +338,21 @@ double euclidDist(double x1, double y1, double x2, double y2)
     return dist;
 }
 
+double  zrenicka_u  = 0,
+        duhovka_u   = 0,
+        horne_v_u   = 0,
+        dolne_v_u   = 0;
+int     uspesnost_p = 0,
+        uspesnost_p_celkovo = 0;
+
+bool show_im = false;
+
 double doIris(string base, std::vector<std::string> data) {
+
+    double  zrenicka_b  = 0,
+            duhovka_b   = 0,
+            horne_v_b   = 0,
+            dolne_v_b   = 0;
 
     string file = base + data.at(0);
     if(!exists(file)) return -1;
@@ -358,16 +372,16 @@ double doIris(string base, std::vector<std::string> data) {
     original = resized;
 
     Mat draw = original.clone();
-    imshow("Original", original);
+    if(show_im) imshow("Original", original);
 
     Mat iris_canny, lid_preprocc;
     vector<Vec3f> circless;
     Canny(original, iris_canny, 100, 60 , 3);
-    imshow("Cannied iris", iris_canny);
+    if(show_im) imshow("Cannied iris", iris_canny);
     //lid_preprocc = lid_canny;
     //lid_canny = blacked_pupil;
     GaussianBlur(original, lid_preprocc, Size(5,5), 1.7, 0);
-    imshow("paster", lid_preprocc);
+    if(show_im) imshow("paster", lid_preprocc);
     /// EYE DETECTION*/
     HoughCircles(lid_preprocc, circless, HOUGH_GRADIENT, 1,
                  lid_preprocc.rows/2,  // change this value to detect circles with different distances to each other
@@ -403,20 +417,22 @@ double doIris(string base, std::vector<std::string> data) {
         Rect2d r3 = r1 & r2;
         Rect2d r4 = r1 | r2;
 
-        cout << "\nUspesnost zrenicky: " << r3.area() / r4.area() << "\n";
+        zrenicka_b = r3.area() / r4.area();
+        cout << "\nUspesnost zrenicky: " << zrenicka_b << "\n";
 
         //return uspesnost(fcirc, rajt);
     } else {
-        //return 0;
+        uspesnost_p_celkovo++;
+        return 0;
     }
     /// Apply Histogram Equalization
     equalizeHist( lid_preprocc, lid_preprocc );
 
-    imshow("hist", lid_preprocc);
+    if(show_im) imshow("hist", lid_preprocc);
 
     int low = 100, high = 10;
     Canny(lid_preprocc, iris_canny, low, high , 3);
-    imshow("Cannied outer", iris_canny);
+    if(show_im) imshow("Cannied outer", iris_canny);
 
     vector<Vec3f> circ_out;
     HoughCircles(lid_preprocc, circ_out, HOUGH_GRADIENT, 2,
@@ -462,13 +478,17 @@ double doIris(string base, std::vector<std::string> data) {
         Rect2d r3 = r1 & r2;
         Rect2d r4 = r1 | r2;
 
-        cout << "\nUspesnost duhovky: " << r3.area() / r4.area() << "\n";
+        duhovka_b = r3.area() / r4.area();
+        cout << "\nUspesnost duhovky: " << duhovka_b << "\n";
 
 
        // circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
         // circle outline
         int radius = c[2];
         circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
+    } else {
+        uspesnost_p_celkovo++;
+        return 0;
     }
 
     // viecka
@@ -476,7 +496,7 @@ double doIris(string base, std::vector<std::string> data) {
 
     low = 140, high = 5;
     Canny(lid_preprocc, iris_canny, low, high , 3);
-    imshow("Cannied outer", iris_canny);
+    if(show_im) imshow("Cannied outer", iris_canny);
     int rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
     vector<Vec3f> circ_vie;
     HoughCircles(lid_preprocc, circ_vie, HOUGH_GRADIENT, 1,
@@ -551,13 +571,17 @@ double doIris(string base, std::vector<std::string> data) {
         Rect2d r3 = r1 & r2;
         Rect2d r4 = r1 | r2;
 
-        cout << "\nUspesnost horneho viecka: " << r3.area() / r4.area() << "\n";
+        horne_v_b = r3.area() / r4.area();
+        cout << "\nUspesnost horneho viecka: " << horne_v_b << "\n";
 
 
         circle(draw, center, 1, Scalar(0, 100, 100), 3, LINE_AA);
         // circle outline
         int radius = c[2];
         circle(draw, center, radius, Scalar(255, 0, 255), 3, LINE_AA);
+    } else {
+        uspesnost_p_celkovo++;
+        return 0;
     }
     horne_viecko_center.y += 50;
     Mat mask = Mat::zeros(lid_preprocc.rows, lid_preprocc.cols, CV_8UC1);
@@ -565,10 +589,10 @@ double doIris(string base, std::vector<std::string> data) {
     Mat final_result = Mat::zeros(lid_preprocc.rows, lid_preprocc.cols, CV_8UC1);
     lid_preprocc.copyTo(final_result, mask);
 
-    imshow("final orez", final_result);
+    if(show_im) imshow("final orez", final_result);
     low = 140, high = 5;
     Canny(final_result, iris_canny, low, high , 3);
-    imshow("Cannied outer", iris_canny);
+    if(show_im) imshow("Cannied outer", iris_canny);
     rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
     vector<Vec3f> circ_vie_d;
     HoughCircles(final_result, circ_vie_d, HOUGH_GRADIENT, 1,
@@ -616,15 +640,35 @@ double doIris(string base, std::vector<std::string> data) {
         Rect2d r3 = r1 & r2;
         Rect2d r4 = r1 | r2;
 
-        cout << "\nUspesnost dolneho  viecka: " << r3.area() / r4.area() << "\n";
+        dolne_v_b = r3.area() / r4.area();
+
+        cout << "\nUspesnost dolneho  viecka: " << dolne_v_b << "\n";
 
         circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
         // circle outline
         int radius = c[2];
         circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
+    } else {
+        uspesnost_p_celkovo++;
+        return 0;
     }
 
-    imshow("detected circless", draw);
+    zrenicka_u  += zrenicka_b;
+    duhovka_u   +=  duhovka_b;
+    horne_v_u   += horne_v_b;
+    dolne_v_u   += dolne_v_b;
+
+    uspesnost_p++;
+
+
+    if(show_im) imshow("detected circless", draw);
+
+    original.release();
+    draw.release();
+    final_result.release();
+    lid_preprocc.release();
+    iris_canny.release();
+    mask.release();
 
     waitKey(0);
 }
@@ -649,7 +693,25 @@ int main( int argc, const char** argv )
         }*/
         cout << "\n";
     }
-    cout << "Celkovo: " << overall / cnt << "\n";
+
+    double zrenicka_u_c  = zrenicka_u / uspesnost_p;
+    double duhovka_u_c   = duhovka_u / uspesnost_p;
+    double horne_v_u_c   = horne_v_u / uspesnost_p;
+    double dolne_v_u_c   = dolne_v_u / uspesnost_p;
+
+    cout << "Uspesne Celkovo zrenicky: " << zrenicka_u_c << "\n";
+    cout << "Uspesne Celkovo duhovka: " << duhovka_u_c << "\n";
+    cout << "Uspesne Celkovo horne vieco: " << horne_v_u_c << "\n";
+    cout << "Uspesne Celkovo dolne viecko: " << dolne_v_u_c << "\n";
+
+    cout << "Uspesne Celkovo: " << (zrenicka_u_c+duhovka_u_c+horne_v_u_c+dolne_v_u_c)/4 << "\n";
+
+    cout << "Celkovo Celkovo zrenicky: " << zrenicka_u / uspesnost_p_celkovo<< "\n";
+    cout << "Celkovo Celkovo duhovka: " << duhovka_u  / uspesnost_p_celkovo<< "\n";
+    cout << "Celkovo Celkovo horne vieco: " << horne_v_u / uspesnost_p_celkovo << "\n";
+    cout << "Celkovo Celkovo dolne viecko: " << dolne_v_u / uspesnost_p_celkovo << "\n";
+
+    cout << "Celkovo Celkovo: " << (zrenicka_u+duhovka_u+horne_v_u+dolne_v_u)/ uspesnost_p_celkovo/4 << "\n";
 /*
     processIris("../../iris/001/1/001_1_1.bmp");
     processIris("../../iris/002/1/002_1_1.bmp");
