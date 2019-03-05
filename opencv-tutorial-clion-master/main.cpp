@@ -497,10 +497,10 @@ double doIris(string base, std::vector<std::string> data) {
     low = 140, high = 5;
     Canny(lid_preprocc, iris_canny, low, high , 3);
     if(show_im) imshow("Cannied outer", iris_canny);
-    int rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
+    int rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 4;
     vector<Vec3f> circ_vie;
-    HoughCircles(lid_preprocc, circ_vie, HOUGH_GRADIENT, 1,
-                 25,  // change this value to detect circles with different distances to each other
+    HoughCircles(lid_preprocc, circ_vie, HOUGH_GRADIENT, 2,
+                 80,  // change this value to detect circles with different distances to each other
                  low, high, rad_min, rad_max// change the last two parameters
             // (min_radius & max_radius) to detect larger circles
     );
@@ -595,8 +595,8 @@ double doIris(string base, std::vector<std::string> data) {
     if(show_im) imshow("Cannied outer", iris_canny);
     rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
     vector<Vec3f> circ_vie_d;
-    HoughCircles(final_result, circ_vie_d, HOUGH_GRADIENT, 1,
-                 15,  // change this value to detect circles with different distances to each other
+    HoughCircles(final_result, circ_vie_d, HOUGH_GRADIENT, 2,
+                 80,  // change this value to detect circles with different distances to each other
                  low, high, rad_min, rad_max// change the last two parameters
             // (min_radius & max_radius) to detect larger circles
     );
