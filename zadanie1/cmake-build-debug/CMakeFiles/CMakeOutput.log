@@ -21,7 +21,7 @@ Compilation of the C compiler identification source "CMakeCCompilerId.c" produce
 
 Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
 
-The C compiler identification is MSVC, found in "E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/CMakeCCompilerId.exe"
+The C compiler identification is MSVC, found in "E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdC/CMakeCCompilerId.exe"
 
 Compiling the CXX compiler identification source file "CMakeCXXCompilerId.cpp" succeeded.
 Compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/bin/Hostx64/x64/cl.exe 
@@ -45,84 +45,84 @@ Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" p
 
 Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
 
-The CXX compiler identification is MSVC, found in "E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/CMakeCXXCompilerId.exe"
+The CXX compiler identification is MSVC, found in "E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/3.13.2/CompilerIdCXX/CMakeCXXCompilerId.exe"
 
 Determining if the C compiler works passed with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_8e48a\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_8e48a.dir\build.make /nologo -L                  CMakeFiles\cmTC_8e48a.dir\build
-Building C object CMakeFiles/cmTC_8e48a.dir/testCCompiler.c.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmFA7C.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_fbd0d\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_fbd0d.dir\build.make /nologo -L                  CMakeFiles\cmTC_fbd0d.dir\build
+Building C object CMakeFiles/cmTC_fbd0d.dir/testCCompiler.c.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmD694.tmp
 testCCompiler.c
-Linking C executable cmTC_8e48a.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_8e48a.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_8e48a.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmFC61.tmp
+Linking C executable cmTC_fbd0d.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_fbd0d.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_fbd0d.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmD741.tmp
 
 
 Detecting C compiler ABI info compiled with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_d5d53\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_d5d53.dir\build.make /nologo -L                  CMakeFiles\cmTC_d5d53.dir\build
-Building C object CMakeFiles/cmTC_d5d53.dir/CMakeCCompilerABI.c.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmFFBB.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_81923\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_81923.dir\build.make /nologo -L                  CMakeFiles\cmTC_81923.dir\build
+Building C object CMakeFiles/cmTC_81923.dir/CMakeCCompilerABI.c.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmDA9B.tmp
 CMakeCCompilerABI.c
-Linking C executable cmTC_d5d53.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_d5d53.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_d5d53.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nm49.tmp
+Linking C executable cmTC_81923.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_81923.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_81923.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmDB29.tmp
 
 
 
 
 Detecting C [] compiler features compiled with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_553e0\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_553e0.dir\build.make /nologo -L                  CMakeFiles\cmTC_553e0.dir\build
-Building C object CMakeFiles/cmTC_553e0.dir/feature_tests.c.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nm346.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_a9e37\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_a9e37.dir\build.make /nologo -L                  CMakeFiles\cmTC_a9e37.dir\build
+Building C object CMakeFiles/cmTC_a9e37.dir/feature_tests.c.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmDE64.tmp
 feature_tests.c
-Linking C executable cmTC_553e0.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_553e0.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_553e0.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nm3D3.tmp
+Linking C executable cmTC_a9e37.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_a9e37.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_a9e37.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmDEE2.tmp
 
 
     Feature record: C_FEATURE:1c_function_prototypes
     Feature record: C_FEATURE:1c_variadic_macros
 Determining if the CXX compiler works passed with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_77961\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_77961.dir\build.make /nologo -L                  CMakeFiles\cmTC_77961.dir\build
-Building CXX object CMakeFiles/cmTC_77961.dir/testCXXCompiler.cxx.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nm7CA.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_9c71d\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_9c71d.dir\build.make /nologo -L                  CMakeFiles\cmTC_9c71d.dir\build
+Building CXX object CMakeFiles/cmTC_9c71d.dir/testCXXCompiler.cxx.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmE26B.tmp
 testCXXCompiler.cxx
-Linking CXX executable cmTC_77961.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_77961.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_77961.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nm867.tmp
+Linking CXX executable cmTC_9c71d.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_9c71d.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_9c71d.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmE2F9.tmp
 
 
 Detecting CXX compiler ABI info compiled with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_42f10\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_42f10.dir\build.make /nologo -L                  CMakeFiles\cmTC_42f10.dir\build
-Building CXX object CMakeFiles/cmTC_42f10.dir/CMakeCXXCompilerABI.cpp.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmB54.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_ccc6c\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_ccc6c.dir\build.make /nologo -L                  CMakeFiles\cmTC_ccc6c.dir\build
+Building CXX object CMakeFiles/cmTC_ccc6c.dir/CMakeCXXCompilerABI.cpp.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmE634.tmp
 CMakeCXXCompilerABI.cpp
-Linking CXX executable cmTC_42f10.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_42f10.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_42f10.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmBE2.tmp
+Linking CXX executable cmTC_ccc6c.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_ccc6c.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_ccc6c.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmE6B2.tmp
 
 
 
 
 Detecting CXX [] compiler features compiled with the following output:
-Change Dir: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/CMakeTmp
+Change Dir: E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/CMakeTmp
 
-Run Build Command:"nmake" "/nologo" "cmTC_e217e\fast"
-	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_e217e.dir\build.make /nologo -L                  CMakeFiles\cmTC_e217e.dir\build
-Building CXX object CMakeFiles/cmTC_e217e.dir/feature_tests.cxx.obj
-	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmEEE.tmp
+Run Build Command:"nmake" "/nologo" "cmTC_0f817\fast"
+	"C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\bin\HostX64\x64\nmake.exe" -f CMakeFiles\cmTC_0f817.dir\build.make /nologo -L                  CMakeFiles\cmTC_0f817.dir\build
+Building CXX object CMakeFiles/cmTC_0f817.dir/feature_tests.cxx.obj
+	C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\cl.exe @C:\Users\Viktor\AppData\Local\Temp\nmE9DD.tmp
 feature_tests.cxx
-Linking CXX executable cmTC_e217e.exe
-	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_e217e.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_e217e.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmFD9.tmp
+Linking CXX executable cmTC_0f817.exe
+	"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -E vs_link_exe --intdir=CMakeFiles\cmTC_0f817.dir --manifests  -- C:\PROGRA~2\MICROS~1\2017\ENTERP~1\VC\Tools\MSVC\1412~1.258\bin\Hostx64\x64\link.exe /nologo @CMakeFiles\cmTC_0f817.dir\objects1.rsp @C:\Users\Viktor\AppData\Local\Temp\nmEA6B.tmp
 
 
     Feature record: CXX_FEATURE:1cxx_aggregate_default_initializers

@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "E:/Skola/BIOM/opencv-tutorial-clion-master/main.cpp" "E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/CMakeFiles/opencv.dir/main.cpp.obj"
+  "E:/Skola/BIOM/zadanie1/main.cpp" "E:/Skola/BIOM/zadanie1/cmake-build-debug/CMakeFiles/opencv.dir/main.cpp.obj"
   )
 set(CMAKE_CXX_COMPILER_ID "MSVC")
 

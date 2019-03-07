@@ -6,9 +6,9 @@
 
 #IncludeRegexTransform: 
 
-E:/Skola/BIOM/opencv-tutorial-clion-master/main.cpp
+E:/Skola/BIOM/zadanie1/main.cpp
 opencv2/opencv.hpp
-E:/Skola/BIOM/opencv-tutorial-clion-master/opencv2/opencv.hpp
+E:/Skola/BIOM/zadanie1/opencv2/opencv.hpp
 fstream
 -
 math.h

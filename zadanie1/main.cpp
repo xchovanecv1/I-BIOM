@@ -106,11 +106,11 @@ bool exists(const std::string& name) {
 
 double euclidDist(double x1, double y1, double x2, double y2)
 {
-    double x = x1 - x2; //calculating number to square in next step
+    double x = x1 - x2;
     double y = y1 - y2;
     double dist;
 
-    dist = pow(x, 2) + pow(y, 2);       //calculating Euclidean distance
+    dist = pow(x, 2) + pow(y, 2);
     dist = sqrt(dist);
 
     return dist;
@@ -187,9 +187,8 @@ double doIris(string base, std::vector<std::string> data) {
     if(show_im) { imshow("paster", lid_preprocc); waitKey(0); }
     /// EYE DETECTION*/
     HoughCircles(lid_preprocc, circless, HOUGH_GRADIENT, 1,
-                 lid_preprocc.rows/2,  // change this value to detect circles with different distances to each other
-                 150, 50, 1, 120// change the last two parameters
-            // (min_radius & max_radius) to detect larger circles
+                 lid_preprocc.rows/2,
+                 150, 50, 1, 120
     );
     cout << circless.size();
     Point zrenicka_cent;
@@ -242,9 +241,8 @@ double doIris(string base, std::vector<std::string> data) {
 
     vector<Vec3f> circ_out;
     HoughCircles(lid_preprocc, circ_out, HOUGH_GRADIENT, 2,
-                 5,  // change this value to detect circles with different distances to each other
-                 low, high, min_r, max_r// change the last two parameters
-            // (min_radius & max_radius) to detect larger circles
+                 5,
+                 low, high, min_r, max_r
     );
     //cout << "Outer:" << circ_out.size();
     double min = std::numeric_limits<double>::max();
@@ -306,9 +304,8 @@ double doIris(string base, std::vector<std::string> data) {
     int rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 4;
     vector<Vec3f> circ_vie;
     HoughCircles(lid_preprocc, circ_vie, HOUGH_GRADIENT, 2,
-                 80,  // change this value to detect circles with different distances to each other
-                 low, high, rad_min, rad_max// change the last two parameters
-            // (min_radius & max_radius) to detect larger circles
+                 80,
+                 low, high, rad_min, rad_max
     );
     cout << "viecka:" << circ_vie.size();
     Vec3f horne_v_mean, dolne_v_mean;
@@ -328,31 +325,8 @@ double doIris(string base, std::vector<std::string> data) {
                 horne_v_mean[1] += c[1];
                 horne_v_mean[2] += c[2];
                 horne_v_mean_c++;
-               /* cout << "rozdil " << dist << "\n";
-                circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
-                // circle outline
-                int radius = c[2];
-                circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);*/
             }
         }
-
-        //dolna
-/*
-        if(c[1] < zrenicka_c[1]) {
-
-            double dist = abs(zrenicka_c[0] - c[0]);
-            if(dist < 20) {
-                horne_v_mean[0] += c[0];
-                horne_v_mean[1] += c[1];
-                horne_v_mean[2] += c[2];
-                horne_v_mean_c++;
-                cout << "rozdil " << dist << "\n";
-                 circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
-                 // circle outline
-                 int radius = c[2];
-                 circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);
-            }
-        }*/
     }
     Point horne_viecko_center;
     Vec3i horne_viecko_vec;
@@ -402,9 +376,8 @@ double doIris(string base, std::vector<std::string> data) {
     rad_min = zrenicka_c[2] * 2, rad_max = zrenicka_c[2]* 8;
     vector<Vec3f> circ_vie_d;
     HoughCircles(final_result, circ_vie_d, HOUGH_GRADIENT, 2,
-                 80,  // change this value to detect circles with different distances to each other
-                 low, high, rad_min, rad_max// change the last two parameters
-            // (min_radius & max_radius) to detect larger circles
+                 80,
+                 low, high, rad_min, rad_max
     );
     cout << "viecka:" << circ_vie_d.size();
 
@@ -421,11 +394,7 @@ double doIris(string base, std::vector<std::string> data) {
                 dolne_v_mean[1] += c[1];
                 dolne_v_mean[2] += c[2];
                 dolne_v_mean_c++;
-                //cout << "rozdil " << dist << "\n";
-                /*circle( draw, center, 1, Scalar(0,100,100), 3, LINE_AA);
-                 // circle outline
-                 int radius = c[2];
-                 circle( draw, center, radius, Scalar(255,0,255), 3, LINE_AA);*/
+
             }
         }
     }
@@ -496,32 +465,14 @@ int main( int argc, const char** argv )
     parseCSV(base);
     std::vector<std::vector<std::string> >::iterator row;
     std::vector<std::string>::iterator col;
-    double overall = 0;
     int cnt = 0;
     for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
-        //cout << *(row->begin());
         doIris(base, *row);
-        /*if(bf != -1) {
-            overall += bf;
-        }*/
-        /*
-        for (col = row->begin(); col != row->end(); col++) {
-            cout << *col << " ";
-        }*/
+
         cout << "\n";
     }
 
     calcSucc();
 
-/*
-    processIris("../../iris/001/1/001_1_1.bmp");
-    processIris("../../iris/002/1/002_1_1.bmp");
-    processIris("../../iris/003/1/003_1_1.bmp");
-    processIris("../../iris/004/1/004_1_1.bmp");
-    processIris("../../iris/005/1/005_1_1.bmp");
-    processIris("../../iris/006/1/006_1_1.bmp");
-    processIris("../../iris/007/1/007_1_1.bmp");
-    processIris("../../iris/008/1/008_1_1.bmp");
-    */
     return 0;
 }

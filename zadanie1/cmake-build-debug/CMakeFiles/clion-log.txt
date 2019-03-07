@@ -1,4 +1,4 @@
-"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" E:\Skola\BIOM\opencv-tutorial-clion-master
+"E:\Programy\JetBrains\CLion 2018.3.4\bin\cmake\win\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - NMake Makefiles" E:\Skola\BIOM\zadanie1
 -- The C compiler identification is MSVC 19.12.25835.0
 -- The CXX compiler identification is MSVC 19.12.25835.0
 -- Check for working C compiler: C:/Program Files (x86)/Microsoft Visual Studio/2017/Enterprise/VC/Tools/MSVC/14.12.25827/bin/Hostx64/x64/cl.exe
@@ -16,4 +16,4 @@
 -- Found OpenCV: E:/opencv/build (found version "4.0.1") 
 -- Configuring done
 -- Generating done
--- Build files have been written to: E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug
+-- Build files have been written to: E:/Skola/BIOM/zadanie1/cmake-build-debug

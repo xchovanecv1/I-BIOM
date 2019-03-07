@@ -1,4 +1,4 @@
-# Install script for directory: E:/Skola/BIOM/opencv-tutorial-clion-master
+# Install script for directory: E:/Skola/BIOM/zadanie1
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -40,5 +40,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "E:/Skola/BIOM/opencv-tutorial-clion-master/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "E:/Skola/BIOM/zadanie1/cmake-build-debug/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")
