@@ -446,6 +446,36 @@ double doIris(string base, std::vector<std::string> data) {
     circle(fin_result, Point(zrenicka_c[0], zrenicka_c[1]), zrenicka_dat[2], Scalar(0,0,0), FILLED);
     if(show_im) imshow("Vysek duhovky", fin_result); waitKey(0);
 
+    vector< vector<Point> > contours;
+    int radius = zrenicka_c[2];
+    int x = int(zrenicka_c[0] - radius);
+    int y = int(zrenicka_c[1] - radius);
+    // Add 2 elements to avoid information of the iris to be cut due to rounding errors
+    int w = int(radius * 2) + 2;
+    int h = w;
+    Mat cropped_region = final_result( Rect(x,y,w,h) ).clone();
+    // Now perform the unwrapping
+    // This is done by the logpolar function who does Logpolar to Cartesian coordinates, so that it can get unwrapped properly
+    Mat unwrapped;
+    Point2f center (float(cropped_region.cols/2.0), float(cropped_region.cols /2.0));
+    logPolar(cropped_region, unwrapped, center, 40, INTER_LINEAR +  WARP_FILL_OUTLIERS);
+    imshow("unwrapped image polar", unwrapped);
+    // Make sure that we only get the region of interest
+    // We do not need the black area for comparing
+    Mat thresholded;
+    // Apply some thresholding so that you keep a white blob where the eye pixels are
+    threshold(unwrapped, thresholded, 10, 255, THRESH_BINARY);
+    imshow("thresholded ", thresholded); waitKey(0);
+    // Run a contour finding algorithm to locate the iris pixels
+    // Then define the bounding box
+    findContours(thresholded.clone(), contours, RETR_EXTERNAL, CHAIN_APPROX_NONE);
+    // Use the bounding box as the ROI for cutting off the black parts
+    Rect ROI = boundingRect(contours[0]);
+    Mat iris_pixels = unwrapped(ROI).clone();
+    imshow("iris pixels", iris_pixels);
+
+    imshow("Vysek duhovky", original); waitKey(0);
+
     original.release();
     draw.release();
     final_result.release();
@@ -456,6 +486,8 @@ double doIris(string base, std::vector<std::string> data) {
     fin_result.release();
 
     calcSucc();
+
+
     waitKey(0);
 }
 

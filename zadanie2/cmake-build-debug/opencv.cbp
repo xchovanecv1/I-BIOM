@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="opencv"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="msvc8"/>
+		<Option virtualFolders="CMake Files\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\opencv\;CMake Files\..\..\..\opencv\build\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="E:/Skola/BIOM/zadanie2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 all"/>
+					<CompileFile command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="E:/Skola/BIOM/zadanie2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 edit_cache"/>
+					<CompileFile command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="opencv">
+				<Option output="E:/Skola/BIOM/zadanie2/cmake-build-debug/opencv.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/Skola/BIOM/zadanie2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="E:/opencv/build"/>
+					<Add directory="E:/opencv/sources/include"/>
+					<Add directory="E:/opencv/sources/modules/core/include"/>
+					<Add directory="E:/opencv/sources/modules/flann/include"/>
+					<Add directory="E:/opencv/sources/modules/imgproc/include"/>
+					<Add directory="E:/opencv/sources/modules/ml/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/phase_unwrapping/include"/>
+					<Add directory="E:/opencv/sources/modules/photo/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/plot/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/reg/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/surface_matching/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xphoto/include"/>
+					<Add directory="E:/opencv/sources/modules/dnn/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/fuzzy/include"/>
+					<Add directory="E:/opencv/sources/modules/gapi/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/hfs/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/img_hash/include"/>
+					<Add directory="E:/opencv/sources/modules/imgcodecs/include"/>
+					<Add directory="E:/opencv/sources/modules/videoio/include"/>
+					<Add directory="E:/opencv/sources/modules/highgui/include"/>
+					<Add directory="E:/opencv/sources/modules/ts/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/bioinspired/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/dnn_objdetect/include"/>
+					<Add directory="E:/opencv/sources/modules/features2d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/line_descriptor/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/text/include"/>
+					<Add directory="E:/opencv/sources/modules/calib3d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/ccalib/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/datasets/include"/>
+					<Add directory="E:/opencv/sources/modules/objdetect/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/rgbd/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/shape/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/stereo/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/structured_light/include"/>
+					<Add directory="E:/opencv/sources/modules/video/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/videostab/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/ximgproc/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xobjdetect/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/aruco/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/bgsegm/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/dpm/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/face/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/optflow/include"/>
+					<Add directory="E:/opencv/sources/modules/stitching/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/superres/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/tracking/include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 opencv"/>
+					<CompileFile command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="opencv/fast">
+				<Option output="E:/Skola/BIOM/zadanie2/cmake-build-debug/opencv.exe" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="E:/Skola/BIOM/zadanie2/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="msvc8"/>
+				<Compiler>
+					<Add directory="E:/opencv/build"/>
+					<Add directory="E:/opencv/sources/include"/>
+					<Add directory="E:/opencv/sources/modules/core/include"/>
+					<Add directory="E:/opencv/sources/modules/flann/include"/>
+					<Add directory="E:/opencv/sources/modules/imgproc/include"/>
+					<Add directory="E:/opencv/sources/modules/ml/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/phase_unwrapping/include"/>
+					<Add directory="E:/opencv/sources/modules/photo/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/plot/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/reg/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/surface_matching/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xphoto/include"/>
+					<Add directory="E:/opencv/sources/modules/dnn/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/fuzzy/include"/>
+					<Add directory="E:/opencv/sources/modules/gapi/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/hfs/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/img_hash/include"/>
+					<Add directory="E:/opencv/sources/modules/imgcodecs/include"/>
+					<Add directory="E:/opencv/sources/modules/videoio/include"/>
+					<Add directory="E:/opencv/sources/modules/highgui/include"/>
+					<Add directory="E:/opencv/sources/modules/ts/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/bioinspired/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/dnn_objdetect/include"/>
+					<Add directory="E:/opencv/sources/modules/features2d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/line_descriptor/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/text/include"/>
+					<Add directory="E:/opencv/sources/modules/calib3d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/ccalib/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/datasets/include"/>
+					<Add directory="E:/opencv/sources/modules/objdetect/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/rgbd/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/shape/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/stereo/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/structured_light/include"/>
+					<Add directory="E:/opencv/sources/modules/video/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/videostab/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/ximgproc/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/xobjdetect/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/aruco/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/bgsegm/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/dpm/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/face/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/optflow/include"/>
+					<Add directory="E:/opencv/sources/modules/stitching/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/superres/include"/>
+					<Add directory="E:/opencv/opencv_contrib-4.0.1/modules/tracking/include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\ATLMFC\include"/>
+					<Add directory="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC\Tools\MSVC\14.12.25827\include"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\NETFXSDK\4.6.1\include\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\ucrt"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\shared"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\um"/>
+					<Add directory="C:\Program Files (x86)\Windows Kits\10\include\10.0.16299.0\winrt"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 opencv/fast"/>
+					<CompileFile command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="E:/Skola/BIOM/zadanie2/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+					<DistClean command="nmake /NOLOGO /f E:\Skola\BIOM\zadanie2\cmake-build-debug\Makefile VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="E:/Skola/BIOM/zadanie2/main.cpp">
+			<Option target="opencv"/>
+		</Unit>
+		<Unit filename="E:/Skola/BIOM/zadanie2/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="E:/Skola/BIOM/zadanie2/../../../opencv/build/OpenCVConfig-version.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\opencv\build\"/>
+		</Unit>
+		<Unit filename="E:/Skola/BIOM/zadanie2/../../../opencv/build/OpenCVConfig.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\opencv\build\"/>
+		</Unit>
+		<Unit filename="E:/Skola/BIOM/zadanie2/../../../opencv/build/OpenCVModules.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\opencv\build\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
