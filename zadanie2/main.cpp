@@ -104,6 +104,19 @@ bool exists(const std::string& name) {
     return (stat (name.c_str(), &buffer) == 0);
 }
 
+
+double euclidDist(Point first, Point second)
+{
+    double x = first.x - second.x;
+    double y = first.y - second.y;
+    double dist;
+
+    dist = pow(x, 2) + pow(y, 2);
+    dist = sqrt(dist);
+
+    return dist;
+}
+
 double euclidDist(double x1, double y1, double x2, double y2)
 {
     double x = x1 - x2;
@@ -525,6 +538,23 @@ double mapRange(int input,int input_start, int input_end, int output_start, int 
      */
 }
 
+float angleBetween(const Point &v1, const Point &v2)
+{
+    float len1 = sqrt(v1.x * v1.x + v1.y * v1.y);
+    float len2 = sqrt(v2.x * v2.x + v2.y * v2.y);
+
+    float dot = v1.x * v2.x + v1.y * v2.y;
+
+    float a = dot / (len1 * len2);
+
+    if (a >= 1.0)
+        return 0.0;
+    else if (a <= -1.0)
+        return M_PI;
+    else
+        return acos(a); // 0..PI
+}
+
 double flatten(string base, std::vector<std::string> data) {
 
     string file = base + data.at(0);
@@ -595,23 +625,22 @@ double flatten(string base, std::vector<std::string> data) {
     //int both_max_y = 80;
 
     //both_max_x = 800;
-    both_max_x = 360;
-    int both_max_y = 50;
-
-    Mat final = Mat::zeros(both_max_y, both_max_x, CV_8UC1);
-    Mat final_map = Mat::zeros(both_max_y, both_max_x, CV_8UC1);
+    both_max_x = 300;
+    int both_max_y = 30;
 
     vector<vector<Point>> pts;
+
+    int pic_h = 0;
 
     int i = 0;
     for(i = 0; i < both_max_x; i++){
         // Inicializacia vektora
-        pts[i].resize(both_max_y);
+        //pts[i].resize(both_max_y);
 
         int duhovka_idx = mapRange(i,0,both_max_x-1,0,duhovka_points.size()-1);
         int zrenicka_idx = mapRange(i,0,both_max_x-1,0,zrenicka_points.size()-1);
 
-        cout << "i " << i << " d [" << duhovka_idx << "/" << duhovka_points.size() <<"] z [" << zrenicka_idx << "/" << zrenicka_points.size() << "] \n";
+        //cout << "i " << i << " d [" << duhovka_idx << "/" << duhovka_points.size() <<"] z [" << zrenicka_idx << "/" << zrenicka_points.size() << "] \n";
         Point duhovka_point = duhovka_points[duhovka_idx];
         Point zrenicka_point = zrenicka_points[zrenicka_idx];
 
@@ -628,14 +657,17 @@ double flatten(string base, std::vector<std::string> data) {
         for(d = 0; d < it.count; d++, ++it) {
             buf[d] = it.pos();
         }
-        cout << "finished\n";
+        //cout << "finished\n";
+        vector<Point> pxs;
 
         for(d = 0; d < both_max_y; d++) {
             int point_idx = mapRange(d,0,both_max_y-1,0,buf.size()-1);
             //circle(draw, it.pos(), 1, Scalar(255, 0, 255), 1, LINE_AA);
             //cout << "d " << d << " i [" << point_idx << "/" << buf.size() <<"]\n";
 
+            pxs.push_back(buf[point_idx]);
             // funct
+            /*
             Scalar colour_h = horne_map_mask.at<uchar>(buf[point_idx]);
             Scalar colour_d = dolne_map_mask.at<uchar>(buf[point_idx]);
 
@@ -645,17 +677,118 @@ double flatten(string base, std::vector<std::string> data) {
 
             final.at<uchar>(d, i) = original.at<uchar>(buf[point_idx]);
             circle(draw, buf[point_idx], 1, Scalar(255, 0, 255), 1, LINE_AA);
+             */
         }
+        pic_h = max(pic_h, (int)pxs.size());
 
-        cout << "points " << it.count << "\n";
-
+        //cout << "points " << it.count << "\n";
+        pts.push_back(pxs);
         //int value_at_that_location_in_edge_map = edges.at<uchar>(circle_points[i].y, circle_points[i].x);
         //cout << value_at_that_location_in_edge_map << " ";
         /*if ( value_at_that_location_in_edge_map == 255 ){
             circle( edges_color, circle_points[i], 2, Scalar( 0, 0, 255 ), -1); // filled circle at the position
         }*/
     }
-    cout << i << "\n";
+    //cout << i << "\n";
+
+
+    Mat final = Mat::zeros(pts[0].size(), pts.size(), CV_8UC1);
+    Mat final_map = Mat::zeros(pts[0].size(), pts.size(), CV_8UC1);
+
+    for(int i=0; i < pts.size(); i++) {
+        for(int j = 0; j < pts[i].size(); j++) {
+            Point before;
+            if(i == 0) {
+                before = pts[pts.size()-2][j];
+            } else {
+                before = pts[i-1][j];
+            }
+            Point after;
+            if(i == pts.size()-1) {
+                after = pts[0][j];
+            } else {
+                after = pts[i+1][j];
+            }
+
+            Point actual = pts[i][j];
+
+            int r = euclidDist(actual,center_zrenicka);
+
+            Mat cutout = Mat::zeros(original.rows, original.cols, CV_8UC1);
+
+            circle(cutout, center_zrenicka, r, Scalar(255, 0, 255), 1, LINE_AA);
+            circle(cutout, actual, 1, Scalar(128, 0, 255), 1, LINE_AA);
+            circle(cutout, after, 1, Scalar(128, 0, 255), 1, LINE_AA);
+
+            //Get points in circle
+            Size axes( r, r );
+            vector<Point> c_points;
+            ellipse2Poly( center_zrenicka, axes, 0, 0, 360, 1, c_points );
+            //ellipse(cutout, center_zrenicka, axes, 0, 0, 360, 1, circle_points );
+/*
+            for(int c=0; c < circle_points.size(); c++) {
+                circle(cutout, c_points[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
+            }
+*/
+            vector<Point> first;
+            vector<Point> second;
+            int found=0;
+            for(int c=0; c < c_points.size(); c++) {
+                int d_f = euclidDist(actual,c_points[c]);
+                int d_s = euclidDist(after,c_points[c]);
+
+                Scalar colour_h = cutout.at<uchar>(c_points[c]);
+                if(d_f == 0 || d_s == 0) {
+                    found++;
+                }
+                if(found == 0 || found == 2) {
+                    first.push_back(c_points[c]);
+                }
+                if(found == 1) {
+                    second.push_back(c_points[c]);
+                }
+                //circle(cutout, locations[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
+            }
+
+            vector<Point> *final_pv;
+
+            if(first.size() <= second.size()) {
+                final_pv = &first;
+            } else {
+                final_pv = &second;
+            }
+
+            int final_pixel = original.at<uchar>(actual);
+            int final_pixel_count = 1;
+
+            for(int f=0; f < final_pv->size(); f++) {
+                //circle(cutout, (*final)[f], 1, Scalar(128, 0, 255), 1, LINE_AA);
+                final_pixel += original.at<uchar>((*final_pv)[f]);
+                final_pixel_count++;
+            }
+
+            uchar final_p = (uchar)(final_pixel/final_pixel_count);
+            //cout << (int)final_p << " pix\n";
+            final.at<uchar>(j, i) = final_p;
+
+
+            Scalar colour_h = horne_map_mask.at<uchar>(actual);
+            Scalar colour_d = dolne_map_mask.at<uchar>(actual);
+
+            if(colour_d.val[0] == 128 || colour_h.val[0] == 128) {
+                final_map.at<uchar>(j, i) = 255;
+            }
+
+            //cout << "FND " << first.size() << " FND" << second.size() << "\n";
+
+            circle(draw, actual, 1, Scalar(255, 0, 255), 1, LINE_AA);
+            circle(draw, before, 1, Scalar(0, 0, 255), 1, LINE_AA);
+            circle(draw, after, 1, Scalar(0, 0, 255), 1, LINE_AA);
+
+            imshow("cutout", cutout);
+            cutout.release();
+        }
+    }
 
     Mat final_i;
     Mat final_map_i;
