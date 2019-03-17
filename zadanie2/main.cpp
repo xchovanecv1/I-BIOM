@@ -555,7 +555,7 @@ float angleBetween(const Point &v1, const Point &v2)
         return acos(a); // 0..PI
 }
 
-double flatten(string base, std::vector<std::string> data) {
+double flatten(string base, std::vector<std::string> data, int width, int height) {
 
     string file = base + data.at(0);
     if (!exists(file)) return -1;
@@ -625,10 +625,13 @@ double flatten(string base, std::vector<std::string> data) {
     //int both_max_y = 80;
 
     //both_max_x = 800;
-    both_max_x = 300;
-    int both_max_y = 30;
+    both_max_x = width;
+    int both_max_y = height;
 
     vector<vector<Point>> pts;
+
+    int image_height = 0;
+    int image_width = max(duhovka_points.size(), zrenicka_points.size());
 
     int pic_h = 0;
 
@@ -657,6 +660,7 @@ double flatten(string base, std::vector<std::string> data) {
         for(d = 0; d < it.count; d++, ++it) {
             buf[d] = it.pos();
         }
+        image_height = it.count;
         //cout << "finished\n";
         vector<Point> pxs;
 
@@ -692,8 +696,9 @@ double flatten(string base, std::vector<std::string> data) {
     //cout << i << "\n";
 
 
-    Mat final = Mat::zeros(pts[0].size(), pts.size(), CV_8UC1);
-    Mat final_map = Mat::zeros(pts[0].size(), pts.size(), CV_8UC1);
+    Mat final = Mat::zeros(height, width, CV_8UC1);
+    Mat final_map = Mat::zeros(height, width, CV_8UC1);
+    Mat final_map_inverse = Mat::zeros(height, width, CV_8UC1);
 
     for(int i=0; i < pts.size(); i++) {
         for(int j = 0; j < pts[i].size(); j++) {
@@ -712,59 +717,77 @@ double flatten(string base, std::vector<std::string> data) {
 
             Point actual = pts[i][j];
 
-            int r = euclidDist(actual,center_zrenicka);
-
-            Mat cutout = Mat::zeros(original.rows, original.cols, CV_8UC1);
-
-            circle(cutout, center_zrenicka, r, Scalar(255, 0, 255), 1, LINE_AA);
-            circle(cutout, actual, 1, Scalar(128, 0, 255), 1, LINE_AA);
-            circle(cutout, after, 1, Scalar(128, 0, 255), 1, LINE_AA);
-
-            //Get points in circle
-            Size axes( r, r );
-            vector<Point> c_points;
-            ellipse2Poly( center_zrenicka, axes, 0, 0, 360, 1, c_points );
-            //ellipse(cutout, center_zrenicka, axes, 0, 0, 360, 1, circle_points );
-/*
-            for(int c=0; c < circle_points.size(); c++) {
-                circle(cutout, c_points[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
-            }
-*/
-            vector<Point> first;
-            vector<Point> second;
-            int found=0;
-            for(int c=0; c < c_points.size(); c++) {
-                int d_f = euclidDist(actual,c_points[c]);
-                int d_s = euclidDist(after,c_points[c]);
-
-                Scalar colour_h = cutout.at<uchar>(c_points[c]);
-                if(d_f == 0 || d_s == 0) {
-                    found++;
-                }
-                if(found == 0 || found == 2) {
-                    first.push_back(c_points[c]);
-                }
-                if(found == 1) {
-                    second.push_back(c_points[c]);
-                }
-                //circle(cutout, locations[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
-            }
-
-            vector<Point> *final_pv;
-
-            if(first.size() <= second.size()) {
-                final_pv = &first;
-            } else {
-                final_pv = &second;
-            }
-
             int final_pixel = original.at<uchar>(actual);
             int final_pixel_count = 1;
+            if(width < image_width) {
+                int r = euclidDist(actual,center_zrenicka);
 
-            for(int f=0; f < final_pv->size(); f++) {
-                //circle(cutout, (*final)[f], 1, Scalar(128, 0, 255), 1, LINE_AA);
-                final_pixel += original.at<uchar>((*final_pv)[f]);
-                final_pixel_count++;
+                Mat cutout = Mat::zeros(original.rows, original.cols, CV_8UC1);
+
+                circle(cutout, center_zrenicka, r, Scalar(255, 0, 255), 1, LINE_AA);
+                circle(cutout, actual, 1, Scalar(128, 0, 255), 1, LINE_AA);
+                circle(cutout, after, 1, Scalar(128, 0, 255), 1, LINE_AA);
+
+                //Get points in circle
+                Size axes( r, r );
+                vector<Point> c_points;
+                ellipse2Poly( center_zrenicka, axes, 0, 0, 360, 1, c_points );
+                //ellipse(cutout, center_zrenicka, axes, 0, 0, 360, 1, circle_points );
+    /*
+                for(int c=0; c < circle_points.size(); c++) {
+                    circle(cutout, c_points[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
+                }
+    */
+                vector<Point> first;
+                vector<Point> second;
+                int found=0;
+                for(int c=0; c < c_points.size(); c++) {
+                    int d_f = euclidDist(actual,c_points[c]);
+                    int d_s = euclidDist(after,c_points[c]);
+
+                    Scalar colour_h = cutout.at<uchar>(c_points[c]);
+                    if(d_f == 0 || d_s == 0) {
+                        found++;
+                    }
+                    if(found == 0 || found == 2) {
+                        first.push_back(c_points[c]);
+                    }
+                    if(found == 1) {
+                        second.push_back(c_points[c]);
+                    }
+                    //circle(cutout, locations[c], 1, Scalar(128, 0, 255), 1, LINE_AA);
+                }
+
+                vector<Point> *final_pv;
+
+                if(first.size() <= second.size()) {
+                    final_pv = &first;
+                } else {
+                    final_pv = &second;
+                }
+
+                for(int f=0; f < final_pv->size(); f++) {
+                    //circle(cutout, (*final)[f], 1, Scalar(128, 0, 255), 1, LINE_AA);
+                    final_pixel += original.at<uchar>((*final_pv)[f]);
+                    final_pixel_count++;
+                }
+                imshow("cutout", cutout);
+                cutout.release();
+            }
+
+            if(height < image_height) {
+                if(j != 0) {
+                    before = pts[i][j-1];
+
+                    LineIterator itt(original, actual, before, 8);
+
+                    int d = 0;
+                    for(d = 0; d < itt.count; d++, ++itt) {
+                        final_pixel += original.at<uchar>(itt.pos());
+                        final_pixel_count++;
+                    }
+                }
+
             }
 
             uchar final_p = (uchar)(final_pixel/final_pixel_count);
@@ -777,6 +800,8 @@ double flatten(string base, std::vector<std::string> data) {
 
             if(colour_d.val[0] == 128 || colour_h.val[0] == 128) {
                 final_map.at<uchar>(j, i) = 255;
+            } else {
+                final_map_inverse.at<uchar>(j, i) = 255;
             }
 
             //cout << "FND " << first.size() << " FND" << second.size() << "\n";
@@ -785,19 +810,26 @@ double flatten(string base, std::vector<std::string> data) {
             circle(draw, before, 1, Scalar(0, 0, 255), 1, LINE_AA);
             circle(draw, after, 1, Scalar(0, 0, 255), 1, LINE_AA);
 
-            imshow("cutout", cutout);
-            cutout.release();
+
         }
     }
 
     Mat final_i;
     Mat final_map_i;
+    Mat final_map_inverse_i;
+
+    Mat final_image;
 
     cv::flip(final, final_i, 0);
     cv::flip(final_map, final_map_i, 0);
+    cv::flip(final_map_inverse, final_map_inverse_i, 0);
 
     imshow("final", final_i);
-    imshow("final map", final_map_i);
+    imshow("final map", final_map);
+    imshow("final map inverse", final_map_inverse_i);
+
+    final_i.copyTo(final_image, final_map_inverse_i);
+    imshow("RESULT", final_image);
 
 /*
     Point start = Point(zrenicka_x, zrenicka_y + zrenicka_radius);
@@ -834,9 +866,11 @@ double flatten(string base, std::vector<std::string> data) {
     draw.release();
     final.release();
     final_map.release();
+    final_map_inverse.release();
 
     final_i.release();
     final_map_i.release();
+    final_map_inverse_i.release();
 
     dolne_map_mask.release();
     horne_map_mask.release();
@@ -859,7 +893,7 @@ int main( int argc, const char** argv )
     std::vector<std::string>::iterator col;
     int cnt = 0;
     for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
-        flatten(base, *row);
+        flatten(base, *row, 800, 600);
 
         cout << "\n";
     }
