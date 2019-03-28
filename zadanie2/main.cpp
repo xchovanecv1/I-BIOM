@@ -62,7 +62,9 @@ double mapRange(int input,int input_start, int input_end, int output_start, int 
      */
 }
 
-double flatten(string base, std::vector<std::string> data, int width, int height) {
+int showImage = 0;
+
+double flatten(string base,string saveBase, std::vector<std::string> data, int width, int height) {
 
     string file = base + data.at(0);
     if (!exists(file)) return -1;
@@ -81,7 +83,7 @@ double flatten(string base, std::vector<std::string> data, int width, int height
     original = resized;
 
     Mat draw = original.clone();
-    imshow("Original", original);
+    if(showImage) imshow("Original", original);
 
     // Zrenicka
     int zrenicka_x = x_offset+stoi(data.at(1)), zrenicka_y = y_offset+stoi(data.at(2)), zrenicka_radius = stoi(data.at(3));
@@ -121,8 +123,8 @@ double flatten(string base, std::vector<std::string> data, int width, int height
     circle(horne_map_mask, center_duhovka,duhovka_radius, Scalar(128,128,128), -1, 8,0);
     circle(horne_map_mask, hornev_center, hornev_radius, Scalar(255,255,255), -1, 8,0);
 
-    imshow("Dolne Mask map", dolne_map_mask);
-    imshow("Horne Mask map", horne_map_mask);
+    if(showImage) imshow("Dolne Mask map", dolne_map_mask);
+    if(showImage) imshow("Horne Mask map", horne_map_mask);
 
 
 
@@ -290,15 +292,17 @@ double flatten(string base, std::vector<std::string> data, int width, int height
     cv::flip(final_map, final_map_i, 0);
     cv::flip(final_map_inverse, final_map_inverse_i, 0);
 
-    imshow("final", final_i);
-    imshow("final map", final_map);
-    imshow("final map inverse", final_map_inverse_i);
+    if(showImage) imshow("final", final_i);
+    if(showImage) imshow("final map", final_map);
+    if(showImage) imshow("final map inverse", final_map_inverse_i);
 
     final_i.copyTo(final_image, final_map_inverse_i);
-    imshow("RESULT", final_image);
+    if(showImage) imshow("RESULT", final_image);
 
+    imwrite( saveBase + data.at(0)+ "_f.jpg", final_i );
+    imwrite( saveBase + data.at(0)+ "_m.jpg", final_map_inverse_i );
 
-    imshow("Working", draw);
+    if(showImage)  imshow("Working", draw);
 
     // FREE MEMORY
     original.release();
@@ -321,12 +325,13 @@ double flatten(string base, std::vector<std::string> data, int width, int height
 int main( int argc, const char** argv )
 {
     const string base = "../../iris_NEW/";
+    const string saveBase = "../../iris_NEW_procesed/";
     parseCSV(base);
     std::vector<std::vector<std::string> >::iterator row;
     std::vector<std::string>::iterator col;
     int cnt = 0;
     for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
-        flatten(base, *row, 800, 600);
+        flatten(base, saveBase, *row, 365, 60);
 
         cout << "\n";
     }
