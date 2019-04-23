@@ -28,6 +28,8 @@ CMakeFiles/opencv.dir/main.cpp.obj
  E:/opencv/opencv_contrib-4.0.1/modules/videostab/include/opencv2/videostab/ring_buffer.hpp
  E:/opencv/opencv_contrib-4.0.1/modules/videostab/include/opencv2/videostab/stabilizer.hpp
  E:/opencv/opencv_contrib-4.0.1/modules/videostab/include/opencv2/videostab/wobble_suppression.hpp
+ E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp
+ E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
  E:/opencv/sources/include/opencv2/opencv.hpp
  E:/opencv/sources/modules/calib3d/include/opencv2/calib3d.hpp
  E:/opencv/sources/modules/core/include/opencv2/core.hpp
@@ -104,7 +106,6 @@ CMakeFiles/opencv.dir/main.cpp.obj
  E:/opencv/sources/modules/highgui/include/opencv2/highgui/highgui.hpp
  E:/opencv/sources/modules/imgcodecs/include/opencv2/imgcodecs.hpp
  E:/opencv/sources/modules/imgproc/include/opencv2/imgproc.hpp
- E:/opencv/sources/modules/imgproc/include/opencv2/imgproc/imgproc.hpp
  E:/opencv/sources/modules/ml/include/opencv2/ml.hpp
  E:/opencv/sources/modules/ml/include/opencv2/ml/ml.inl.hpp
  E:/opencv/sources/modules/objdetect/include/opencv2/objdetect.hpp

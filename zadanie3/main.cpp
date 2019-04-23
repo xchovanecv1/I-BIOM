@@ -1,9 +1,15 @@
 #include "opencv2/opencv.hpp"
 #include <fstream>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/xfeatures2d.hpp>
+#include <opencv2/features2d.hpp>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 using namespace std;
 using namespace cv;
+using namespace cv::xfeatures2d;
 
 std::vector<std::vector<std::string> > parsedCsv;
 
@@ -39,7 +45,7 @@ bool exists(const std::string& name) {
 }
 
 
-int showImage = 1;
+int showImage = 0;
 
 double lambda( int val) {
     return 0.5+val/100.0;
@@ -75,6 +81,7 @@ GaborParam makeGaborParam(int kernel_size,int Sigma,int Lambda,int Theta,int Psi
     ret.Treshold = Treshold;
     return ret;
 }
+
 double flatten(string base,string saveBase, std::vector<std::string> data, int width, int height) {
 
     string file = base + data.at(0)+ "_f.jpg";
@@ -85,7 +92,18 @@ double flatten(string base,string saveBase, std::vector<std::string> data, int w
     Mat original = imread(file, IMREAD_GRAYSCALE);
     if(showImage) imshow("original", original);
 
+    string saveFile = saveBase + data.at(0);
+/*
+    Ptr<SIFT> detector = SIFT::create();
 
+    std::vector<cv::KeyPoint> keypoints;
+    detector->detect(original, keypoints);
+
+    // Add results to image and save.
+    cv::Mat output;
+    cv::drawKeypoints(original, keypoints, output);
+    cv::imwrite("sift_result.jpg", output);
+*/
     Mat dest;
     Mat src_f;
 
@@ -94,13 +112,20 @@ double flatten(string base,string saveBase, std::vector<std::string> data, int w
     std::vector<GaborParam> g_parameters;
 
     g_parameters.push_back(makeGaborParam(20, 8, 41, 0, 92, 4, 90));
+    for(int i = 0; i < 160; i+=10) {
+        g_parameters.push_back(makeGaborParam(20, 8, 41, 0, i, 4, 90));
+    }
+/*
     g_parameters.push_back(makeGaborParam(10, 6,40,2,93,2,90));
     g_parameters.push_back(makeGaborParam(10,10,36,75,66,58,120));
     g_parameters.push_back(makeGaborParam(10,7,25,43,107,15,24));
     g_parameters.push_back(makeGaborParam(20,11,50,104,80,58,158));
+*/
 
-
-
+    cv::Mat finmat = cv::Mat::zeros(original.size(), CV_32F);
+    cv::Mat conv = cv::Mat::zeros(original.size(), CV_32F);
+    cv::Mat showis = cv::Mat::zeros(original.size(), CV_8U);
+    int count = 0;
     for(std::vector<GaborParam>::iterator it = g_parameters.begin(); it != g_parameters.end(); ++it) {
         double sig = it->Sigma, th = theta(it->Theta), lm = lambda(it->Lambda), gm = it->Gamma, ps = psi(it->Psi);
 
@@ -110,31 +135,46 @@ double flatten(string base,string saveBase, std::vector<std::string> data, int w
         Mat viz;
         dest.convertTo(viz,CV_8U,255.0/1.0);     // move to proper[0..255] range to show it
 
-        imshow("k",kernel);
-        imshow("d",dest);
-        imshow("v",viz);
+        if(showImage)  imshow("k",kernel);
+        if(showImage) imshow("d",dest);
+        if(showImage) imshow("v",viz);
 
         Mat resized(original.rows * 3, original.cols , CV_8UC1);
 
         original.copyTo( resized( Rect((0), (0/*y_offset*/), original.cols, original.rows) ) );
         viz.copyTo( resized( Rect((0), (original.rows/*y_offset*/), original.cols, original.rows) ) );
 
-        cerr << viz(Rect(30,30,10,10)) << endl; // peek into the data
+       // cerr << viz(Rect(30,30,10,10)) << endl; // peek into the data
 
         Mat trash;
         threshold( viz, trash, it->Treshold, 255, 0);
         trash.copyTo( resized( Rect((0), (original.rows*2/*y_offset*/), original.cols, original.rows) ) );
 
-        imshow("t",trash);
-        imshow("Fin", resized);
-        waitKey();
-    }
+        if(showImage) imshow("t",trash);
+        if(showImage) imshow("Fin", resized);
+        trash.convertTo(conv, CV_32F);
+        finmat = ((conv + finmat));
 
+        count++;
+        if(count > 1) {
+            finmat = finmat/2;
+        }
+    }
+    finmat.convertTo(showis,CV_8U,255.0/1.0);
+    if(showImage) imshow("Sum", showis);
+
+    imwrite(saveFile, showis);
+
+    if(showImage) waitKey();
     // FREE MEMORY
     src_f.release();
     dest.release();
     original.release();
-    waitKey(0);
+    finmat.release();
+    conv.release();
+    showis.release();
+
+    //waitKey(0);
 
 }
 

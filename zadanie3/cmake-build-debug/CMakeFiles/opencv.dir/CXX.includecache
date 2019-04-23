@@ -11,19 +11,15 @@ opencv2/opencv.hpp
 E:/Skola/BIOM/zadanie3/opencv2/opencv.hpp
 fstream
 -
-math.h
--
 opencv2/core/core.hpp
--
-opencv2/imgproc/imgproc.hpp
 -
 opencv2/highgui/highgui.hpp
 -
+opencv2/xfeatures2d.hpp
+-
+opencv2/features2d.hpp
+-
 math.h
--
-iostream
--
-fstream
 -
 
 E:/opencv/build/cv_cpu_config.h
@@ -221,6 +217,16 @@ opencv2/videostab/global_motion.hpp
 E:/opencv/opencv_contrib-4.0.1/modules/videostab/include/opencv2/videostab/opencv2/videostab/global_motion.hpp
 opencv2/videostab/log.hpp
 E:/opencv/opencv_contrib-4.0.1/modules/videostab/include/opencv2/videostab/opencv2/videostab/log.hpp
+
+E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/xfeatures2d.hpp
+opencv2/features2d.hpp
+E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/opencv2/features2d.hpp
+opencv2/xfeatures2d/nonfree.hpp
+E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/opencv2/xfeatures2d/nonfree.hpp
+
+E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/xfeatures2d/nonfree.hpp
+opencv2/features2d.hpp
+E:/opencv/opencv_contrib-4.0.1/modules/xfeatures2d/include/opencv2/xfeatures2d/opencv2/features2d.hpp
 
 E:/opencv/sources/include/opencv2/opencv.hpp
 opencv2/opencv_modules.hpp
@@ -1093,10 +1099,6 @@ E:/opencv/sources/modules/imgcodecs/include/opencv2/opencv2/core.hpp
 E:/opencv/sources/modules/imgproc/include/opencv2/imgproc.hpp
 opencv2/core.hpp
 E:/opencv/sources/modules/imgproc/include/opencv2/opencv2/core.hpp
-
-E:/opencv/sources/modules/imgproc/include/opencv2/imgproc/imgproc.hpp
-opencv2/imgproc.hpp
-E:/opencv/sources/modules/imgproc/include/opencv2/imgproc/opencv2/imgproc.hpp
 
 E:/opencv/sources/modules/ml/include/opencv2/ml.hpp
 opencv2/core.hpp

@@ -406,7 +406,7 @@ void loadData(string base, float train_percentage = 0.7) {
 
         im.copyTo(out, map);
 
-        cv::resize(out, out, cv::Size(), 0.5, 0.5);
+        cv::resize(out, out, cv::Size(), 0.7, 0.7);
         //cv::resize(map, map, cv::Size(), 0.5, 0.5);
 
 
@@ -532,12 +532,13 @@ int main( int argc, const char** argv )
     const string base = "../../iris_NEW_3/";
     const string mapBase = "../../iris_NEW_procesed/";
 
-    const string saveBase = "../../forth_2/";
+    const string saveBase = "../../forth_5/";
     const string saveBase2 = "../../forth_4/";
+
 
     im_pair correct_pairs;
     im_pair not_correct_pairs;
-
+    /*
     right_pairs(correct_pairs, base, 1500);
 
     pre_process(correct_pairs, base, mapBase);
@@ -545,6 +546,7 @@ int main( int argc, const char** argv )
     save_pres(saveBase2);
 
     return 0;
+    */
     loadData(saveBase);
 
     train_images.convertTo(train_images, CV_32F);
@@ -586,6 +588,13 @@ int main( int argc, const char** argv )
      * 0.000001
      * 73.84
      * */
+    /*
+     * NN 2
+     * Dataset 5
+     * 80 - 80
+     * 0.000001
+     * 73.84
+     * */
     cout << number_of_classes << endl;
     std::vector<int> layerSizes = { networkInputSize, 80, 80,
                                     networkOutputSize };
@@ -597,7 +606,7 @@ int main( int argc, const char** argv )
     mlp->setActivationFunction(cv::ml::ANN_MLP::SIGMOID_SYM);
 
     //mlp->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 900, 0.00001));
-    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.000001);
+    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
 
     cout << "tu" << endl;
 
@@ -613,17 +622,21 @@ int main( int argc, const char** argv )
     int poor_epochs_stop = 2;
     float poor_epoch_tresh = 0.001;
 
+    vector<float> train_succ;
+    vector<float> test_succ;
+
     for(int nEpochs = 2; nEpochs <= maxEpoch; nEpochs++) {
         // train network1 with one more epoch
         mlp->train(trainData,cv::ml::ANN_MLP::UPDATE_WEIGHTS);
 
-        if(nEpochs % 10 == 0) {
+        //if(nEpochs % 10 == 0) {
             cout << "Iteration: " << nEpochs << " / " << maxEpoch << endl;
             mlp->predict(train_images, predictions);
 
             Mat prd = flat_predicted(predictions);
 
-            assert_predict(prd, train_labels);
+            float train_s = assert_predict(prd, train_labels);
+            train_succ.push_back(train_s);
 
             mlp->predict(test_images, predictions);
 
@@ -633,11 +646,13 @@ int main( int argc, const char** argv )
             float suc = assert_predict(prd, test_labels);
             float dif = (suc - last_succ);
             cout << "Diff" << dif << endl;
-
+            test_succ.push_back(suc);
             last_succ = suc;
 
             if(dif < poor_epoch_tresh) {
                 poor_epochs++;
+            } else {
+                poor_epochs = 0;
             }
 
             if(poor_epochs >= poor_epochs_stop) {
@@ -646,7 +661,7 @@ int main( int argc, const char** argv )
             }
 
             cout << endl;
-        }
+        //}
         /*
         double totalError = 0;
         for(int i = 0; i < test_images.rows; i++)
@@ -664,6 +679,18 @@ int main( int argc, const char** argv )
     assert_predict(prd, test_labels);
 
     mlp->save("nn.yml");
+
+    int i = 2;
+    for(auto s : train_succ) {
+        cout << i << "\t" << s << endl;
+        i++;
+    }
+    i = 2;
+    cout << endl << endl;
+    for(auto s : test_succ) {
+        cout << i << "\t" << s << endl;
+        i++;
+    }
 
 
     //abs(predictions, predictions);
