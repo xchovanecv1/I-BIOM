@@ -93,17 +93,25 @@ double flatten(string base,string saveBase, std::vector<std::string> data, int w
     if(showImage) imshow("original", original);
 
     string saveFile = saveBase + data.at(0);
-/*
-    Ptr<SIFT> detector = SIFT::create();
+
+    Ptr<SIFT> detector = SIFT::create(30);
+    DescriptorExtractor* extractor;
+    extractor = new SiftDescriptorExtractor();
 
     std::vector<cv::KeyPoint> keypoints;
+    Mat descriptors;
     detector->detect(original, keypoints);
+    extractor->compute(original, keypoints, descriptors);
 
     // Add results to image and save.
     cv::Mat output;
     cv::drawKeypoints(original, keypoints, output);
     cv::imwrite("sift_result.jpg", output);
-*/
+
+
+
+
+
     Mat dest;
     Mat src_f;
 

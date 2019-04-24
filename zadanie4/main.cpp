@@ -209,36 +209,70 @@ double flatten(string base,string mapBase, std::vector<std::string> data,std::ve
 
 }
 
-void sift_Extract(string base, std::vector<std::string> data) {
+Mat sift_Extract(string base, std::vector<std::string> data, int maxDescs, int* label, char* lr) {
 
     string file = base + data.at(0) + "_f.jpg";
+    string map = base + data.at(0) + "_m.jpg";
+    Mat out;
+    *lr = 0;
+    *label = 0;
 
-    if (!exists(file)) return;
+    if (exists(file) && exists(map)) {
+
+        string name = data.at(0).substr(0, data.at(0).find("/"));
+        cout << data.at(0) << endl;
+        *label = stoi(name);
+        *lr = data.at(0).substr(name.length()+1, 1)[0];
+
+        cout << "class " << *label << "LR " << *lr << endl;
+
+        Mat original = imread(file, IMREAD_UNCHANGED);
+        Mat originalMap = imread(map, IMREAD_UNCHANGED);
+        flatImage(originalMap);
+        //if(showImage) imshow("original", original);
+        //if(showImage) imshow("map", originalMap);
+        Mat proces;
+        original.copyTo(proces, originalMap);
+        //if(showImage) imshow("proc", proces);
+
+        Ptr<SIFT> detector = SIFT::create(maxDescs);
+
+        Mat descriptors;
+
+        std::vector<cv::KeyPoint> keypoints;
+        detector->detect(proces, keypoints);
+        detector->compute(original, keypoints, descriptors);
+
+        if(descriptors.rows < maxDescs)  {
+            *lr = 0;
+            return out;
+        }
+
+        cout << descriptors.rows << " " <<descriptors.cols << endl;
+        descriptors = descriptors(Rect(0,0,128,maxDescs));
 
 
-    Mat original = imread(file, IMREAD_UNCHANGED);
-    if(showImage) imshow("original", original);
+        //cout << descriptors << endl;
 
-    Ptr<SIFT> detector = SIFT::create(25);
+        out = descriptors.reshape(1,1);
 
-    std::vector<cv::KeyPoint> keypoints;
-    detector->detect(original, keypoints);
+        cv::Mat output;
+        cv::drawKeypoints(proces, keypoints, output);
 
-    cv::Mat output;
-    cv::drawKeypoints(original, keypoints, output);
+        //imshow("Key", output);
 
-    imshow("Key", output);
+        //waitKey(0);
 
-    waitKey(0);
-
-    original.release();
-    output.release();
+        original.release();
+        output.release();
+    }
+    return out;
 }
 
-void right_pairs(im_pair &in, string base, int max) {
+void right_pairs(im_pair &in, string base, int max, bool incorrect = false) {
 
     char fr[100], sc[100];
-    char side[1];
+    char side[1], other[1];
 
     int max_count = 0;
 
@@ -249,13 +283,17 @@ void right_pairs(im_pair &in, string base, int max) {
             cout << g << endl;
             if (g <= 6) {
                 side[0] = 'R';
+                other[0] = 'L';
             } else {
                 g_idx -= 5;
                 side[0] = 'L';
+                other[0] = 'R';
             }
             snprintf(fr, sizeof(fr), "%03d/%c/S1%03d%c%02d.jpg", i, side[0],i, side[0],1);
+            if(incorrect) side[0] = other[0];
             snprintf(sc, sizeof(sc), "%03d/%c/S1%03d%c%02d.jpg", i, side[0],i, side[0],g_idx);
 
+            cout << fr << endl << sc << endl << endl;
             string file = base + fr;
             string file2 = base + sc;
 
@@ -295,6 +333,7 @@ void save_pres(string base) {
         imwrite(map, (*im));
     }
 }
+vector<int> hamDists;
 
 void pre_process(im_pair in, string base, string mapBase) {
 
@@ -330,6 +369,7 @@ void pre_process(im_pair in, string base, string mapBase) {
             }
         }
         //cout << "Min dist: " << min << " Ofset" << min_ofset << endl;
+        hamDists.push_back(min);
 
         Mat fixed = cv::Mat::zeros(original.size(), CV_8U);
         Mat fixedMap = cv::Mat::zeros(original.size(), CV_8U);
@@ -532,71 +572,97 @@ int main( int argc, const char** argv )
     const string base = "../../iris_NEW_3/";
     const string mapBase = "../../iris_NEW_procesed/";
 
-    const string saveBase = "../../forth_5/";
-    const string saveBase2 = "../../forth_4/";
+    const string saveBase = "../../forth_4/";
+    //const string saveBase2 = "../../forth_4/";
 
 
     im_pair correct_pairs;
     im_pair not_correct_pairs;
-    /*
-    right_pairs(correct_pairs, base, 1500);
-
+/*
+    right_pairs(correct_pairs, base, 200, true);
     pre_process(correct_pairs, base, mapBase);
 
-    save_pres(saveBase2);
+    for(auto s : hamDists) {
+        cout << s << endl;
+    }
+
+    //pre_process(im_pair in, string base, string mapBase)
+    //right_pairs(not_correct_pairs, base, 200, true);
+
+    //pre_process(correct_pairs, base, mapBase);
+
+    //save_pres(saveBase2);
 
     return 0;
-    */
-    loadData(saveBase);
+*/
 
+    //loadData(saveBase);
+
+    parseCSV(originalBase);
+    std::vector<std::vector<std::string> >::iterator row;
+    std::vector<std::string>::iterator col;
+    int cnt = 0;
+    vector<Mat> buf;
+    int last_l = 0;
+    char last_lr = 0;
+    int classes = 7;
+    for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
+        std::vector<std::string> data = *row;
+        //row++;
+        //std::vector<std::string> data2 = *row;
+        //flatten(base, mapBase, data, data2, 365, 60);
+        int lab = 0;
+        char lr = 0;
+
+        Mat desc = sift_Extract(mapBase, data, 20, &lab, &lr);
+        if(lab > classes) break;
+        if(lr != 0) {
+            if(cnt > 0 && last_lr != lr) {
+                last_lr = lr;
+                int riad=0;
+                //cout << "Pocet: " << buf.size() << endl;
+
+                cv::Mat zaradenie = cv::Mat::zeros(cv::Size(classes, 1), CV_32F);
+                zaradenie.at<float>(lab-1) = 1;
+
+                for(Mat mt : buf) {
+                    cout << mt.rows << " " << mt.cols << endl;
+                    if(int(buf.size()*0.7) > riad){
+                   //     cout << "Train" << endl;
+                        train_images.push_back(mt);
+                        train_labels.push_back(zaradenie);
+                    } else {
+                        test_images.push_back(mt);
+                        test_labels.push_back(zaradenie);
+                     //   cout << "Test" << endl;
+                    }
+                    //cout << zaradenie << endl;
+                    riad++;
+                }
+                buf.clear();
+            }
+            buf.push_back(desc);
+        }
+        cout << "\n";
+    }
+
+    cv::normalize(train_images, train_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+    cv::normalize(test_images, test_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+    //cout << test_images << endl;
     train_images.convertTo(train_images, CV_32F);
     train_labels.convertTo(train_labels, CV_32F);
     test_images.convertTo(test_images, CV_32F);
     test_labels.convertTo(test_labels, CV_32F);
- /*
-    int networkInputSize = train_images.cols;
-    int networkOutputSize = train_labels.cols;
-    cv::Ptr<cv::ml::ANN_MLP> mlp = cv::ml::ANN_MLP::create();
-    std::vector<int> layerSizes = { networkInputSize, 100,
-                                    networkOutputSize };
-    mlp->setLayerSizes(layerSizes);
-    mlp->setActivationFunction(cv::ml::ANN_MLP::SIGMOID_SYM);
 
-    mlp->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 900, 0.00001));
-    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.001);
-
-    cout << "tu" << endl;
-
-    mlp->train(train_images, cv::ml::ROW_SAMPLE, train_labels);
-
-    Mat outs;
-    mlp->predict(train_images, outs);
-
-    */
+    cout << "Train imgs: " << train_images.rows << endl;
+    cout << "Test imgs: " << test_images.rows << endl;
 
     int networkInputSize = train_images.cols;
     int networkOutputSize = train_labels.cols;
     cv::Ptr<cv::ml::ANN_MLP> mlp = cv::ml::ANN_MLP::create();
-    // 30 20 001 -> 62.3
-    // 60,30, 001 -> 69
-    // 60, 60 0001 -> 74.6
 
-    /*
-     * NN 2
-     * Dataset 1
-     * 80 - 80
-     * 0.000001
-     * 73.84
-     * */
-    /*
-     * NN 2
-     * Dataset 5
-     * 80 - 80
-     * 0.000001
-     * 73.84
-     * */
     cout << number_of_classes << endl;
-    std::vector<int> layerSizes = { networkInputSize, 80, 80,
+    std::vector<int> layerSizes = { networkInputSize, 70, 40,
                                     networkOutputSize };
 
     mlp->setTermCriteria(cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 1, 0));
@@ -606,7 +672,7 @@ int main( int argc, const char** argv )
     mlp->setActivationFunction(cv::ml::ANN_MLP::SIGMOID_SYM);
 
     //mlp->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 900, 0.00001));
-    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.0001);
+    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.001);
 
     cout << "tu" << endl;
 
@@ -616,11 +682,9 @@ int main( int argc, const char** argv )
     float last_succ = 0;
     int poor_epochs = 0;
 
-    /*
-     * settings
-     * */
-    int poor_epochs_stop = 2;
-    float poor_epoch_tresh = 0.001;
+    // Settings
+    int poor_epochs_stop = 50;
+    float poor_epoch_tresh = 0.0001;
 
     vector<float> train_succ;
     vector<float> test_succ;
@@ -661,15 +725,7 @@ int main( int argc, const char** argv )
             }
 
             cout << endl;
-        //}
-        /*
-        double totalError = 0;
-        for(int i = 0; i < test_images.rows; i++)
-            for(int j=0; j < test_images.cols; j++)
-                totalError += abs( (float)test_labels.at<char>(i, j) - predictions.at<float>(i, j) );
-        double aveError = totalError / (double) (test_images.rows);
-        cout << "Error " << aveError << endl;
-         */
+
     }
 
     mlp->predict(test_images, predictions);
@@ -693,25 +749,6 @@ int main( int argc, const char** argv )
     }
 
 
-    //abs(predictions, predictions);
-    //predictions.convertTo(predictions, CV_32S, 100, 0.5);
-    //cout << flat_predicted(predictions) << endl << endl;
-/*
-    Mat prd = flat_predicted(predictions);
-
-    assert_predict(prd, test_labels);
-*/
-    //cout << test_labels << endl << endl;
-   /* cout << test_labels << endl << endl;
-    cout << (test_labels - predictions) << endl << endl;
-*/
-
-    /*vector<Mat>::iterator img;  // declare an iterator to a vector of strings
-    vector<Mat>::iterator lab;  // declare an iterator to a vector of strings
-    for(img = test_images.begin(), lab = test_labels.begin(); img != test_images.end(), lab != test_labels.end(); img++, lab++) {
-       Mat pred;
-       mlp->predict()
-    }*/
     return 0;
     // Correct pairs
     right_pairs(correct_pairs, base, 20);
