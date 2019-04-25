@@ -220,27 +220,33 @@ Mat sift_Extract(string base, std::vector<std::string> data, int maxDescs, int* 
     if (exists(file) && exists(map)) {
 
         string name = data.at(0).substr(0, data.at(0).find("/"));
-        cout << data.at(0) << endl;
         *label = stoi(name);
         *lr = data.at(0).substr(name.length()+1, 1)[0];
+/*
+        if(*lr == 'L') {
+            *lr = 0;
+            return out;
+        }*/
+        //cout << data.at(0) << endl;
 
-        cout << "class " << *label << "LR " << *lr << endl;
+        //cout << "class " << *label << "LR " << *lr << endl;
 
         Mat original = imread(file, IMREAD_UNCHANGED);
         Mat originalMap = imread(map, IMREAD_UNCHANGED);
         flatImage(originalMap);
         //if(showImage) imshow("original", original);
         //if(showImage) imshow("map", originalMap);
+        //waitKey(0);
         Mat proces;
         original.copyTo(proces, originalMap);
         //if(showImage) imshow("proc", proces);
 
-        Ptr<SIFT> detector = SIFT::create(maxDescs);
+        Ptr<SIFT> detector = SIFT::create(maxDescs, 2, 0.0004, 3, 1.6);
 
         Mat descriptors;
 
         std::vector<cv::KeyPoint> keypoints;
-        detector->detect(proces, keypoints);
+        detector->detect(proces, keypoints, originalMap);
         detector->compute(original, keypoints, descriptors);
 
         if(descriptors.rows < maxDescs)  {
@@ -248,7 +254,7 @@ Mat sift_Extract(string base, std::vector<std::string> data, int maxDescs, int* 
             return out;
         }
 
-        cout << descriptors.rows << " " <<descriptors.cols << endl;
+       // cout << descriptors.rows << " " <<descriptors.cols << endl;
         descriptors = descriptors(Rect(0,0,128,maxDescs));
 
 
@@ -259,9 +265,9 @@ Mat sift_Extract(string base, std::vector<std::string> data, int maxDescs, int* 
         cv::Mat output;
         cv::drawKeypoints(proces, keypoints, output);
 
-        //imshow("Key", output);
+//        imshow("Key", output);
 
-        //waitKey(0);
+      //  waitKey(0);
 
         original.release();
         output.release();
@@ -605,7 +611,7 @@ int main( int argc, const char** argv )
     vector<Mat> buf;
     int last_l = 0;
     char last_lr = 0;
-    int classes = 7;
+    int classes = 20;
     for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
         std::vector<std::string> data = *row;
         //row++;
@@ -614,11 +620,11 @@ int main( int argc, const char** argv )
         int lab = 0;
         char lr = 0;
 
-        Mat desc = sift_Extract(mapBase, data, 20, &lab, &lr);
+        Mat desc = sift_Extract(mapBase, data, 10, &lab, &lr);
         if(lab > classes) break;
         if(lr != 0) {
-            if(cnt > 0 && last_lr != lr) {
-                last_lr = lr;
+            if(cnt > 0 && last_l != lab) {
+                last_l = lab;
                 int riad=0;
                 //cout << "Pocet: " << buf.size() << endl;
 
@@ -626,7 +632,7 @@ int main( int argc, const char** argv )
                 zaradenie.at<float>(lab-1) = 1;
 
                 for(Mat mt : buf) {
-                    cout << mt.rows << " " << mt.cols << endl;
+                    //cout << mt.rows << " " << mt.cols << endl;
                     if(int(buf.size()*0.7) > riad){
                    //     cout << "Train" << endl;
                         train_images.push_back(mt);
@@ -643,11 +649,11 @@ int main( int argc, const char** argv )
             }
             buf.push_back(desc);
         }
-        cout << "\n";
+        //cout << "\n";
     }
 
-    cv::normalize(train_images, train_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
-    cv::normalize(test_images, test_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+    //cv::normalize(train_images, train_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
+    //cv::normalize(test_images, test_images, 0, 1, cv::NORM_MINMAX, -1, cv::Mat());
     //cout << test_images << endl;
     train_images.convertTo(train_images, CV_32F);
     train_labels.convertTo(train_labels, CV_32F);
@@ -662,17 +668,17 @@ int main( int argc, const char** argv )
     cv::Ptr<cv::ml::ANN_MLP> mlp = cv::ml::ANN_MLP::create();
 
     cout << number_of_classes << endl;
-    std::vector<int> layerSizes = { networkInputSize, 70, 40,
+    std::vector<int> layerSizes = { networkInputSize, 20, 20,
                                     networkOutputSize };
 
-    mlp->setTermCriteria(cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 1, 0));
+    mlp->setTermCriteria(cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 1, 0.001));
     cv::Ptr<cv::ml::TrainData> trainData = cv::ml::TrainData::create(train_images,cv::ml::ROW_SAMPLE,train_labels,cv::Mat(),cv::Mat(),cv::Mat(),cv::Mat());
 
     mlp->setLayerSizes(layerSizes);
     mlp->setActivationFunction(cv::ml::ANN_MLP::SIGMOID_SYM);
 
     //mlp->setTermCriteria(TermCriteria(TermCriteria::MAX_ITER+TermCriteria::EPS, 900, 0.00001));
-    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP, 0.001);
+    mlp->setTrainMethod(ml::ANN_MLP::BACKPROP , 0.001);
 
     cout << "tu" << endl;
 
@@ -683,7 +689,7 @@ int main( int argc, const char** argv )
     int poor_epochs = 0;
 
     // Settings
-    int poor_epochs_stop = 50;
+    int poor_epochs_stop = 15;
     float poor_epoch_tresh = 0.0001;
 
     vector<float> train_succ;
