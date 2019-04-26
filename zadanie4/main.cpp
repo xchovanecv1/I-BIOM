@@ -668,10 +668,10 @@ int main( int argc, const char** argv )
     cv::Ptr<cv::ml::ANN_MLP> mlp = cv::ml::ANN_MLP::create();
 
     cout << number_of_classes << endl;
-    std::vector<int> layerSizes = { networkInputSize, 20, 20,
+    std::vector<int> layerSizes = { networkInputSize, 30, 20,
                                     networkOutputSize };
 
-    mlp->setTermCriteria(cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 1, 0.001));
+    mlp->setTermCriteria(cv::TermCriteria(cv::TermCriteria::COUNT + cv::TermCriteria::EPS, 1, 0));
     cv::Ptr<cv::ml::TrainData> trainData = cv::ml::TrainData::create(train_images,cv::ml::ROW_SAMPLE,train_labels,cv::Mat(),cv::Mat(),cv::Mat(),cv::Mat());
 
     mlp->setLayerSizes(layerSizes);
@@ -755,30 +755,5 @@ int main( int argc, const char** argv )
     }
 
 
-    return 0;
-    // Correct pairs
-    right_pairs(correct_pairs, base, 20);
-/*
-    cout << get<0>(correct_pairs.at(22)) << endl;
-    cout << get<1>(correct_pairs.at(22)) << endl;
-*/
-    pre_process(correct_pairs, base, mapBase);
-
-    save_pres(saveBase);
-
-    /*
-    parseCSV(originalBase);
-    std::vector<std::vector<std::string> >::iterator row;
-    std::vector<std::string>::iterator col;
-    int cnt = 0;
-    for (row = parsedCsv.begin(); row != parsedCsv.end(); row++, cnt++) {
-        std::vector<std::string> data = *row;
-        //row++;
-        //std::vector<std::string> data2 = *row;
-        //flatten(base, mapBase, data, data2, 365, 60);
-        sift_Extract(mapBase, data);
-        cout << "\n";
-    }
-*/
     return 0;
 }
